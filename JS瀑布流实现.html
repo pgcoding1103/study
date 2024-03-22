@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .container {
+        position: relative;
+        width: 80%;
+      }
+      .card {
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        text-align: center;
+        line-height: 200px;
+        background-color: aquamarine;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="card" style="height: 400px">card1</div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+    </div>
+  </body>
+  <script>
+    const container = document.querySelector('.container')
+    let allCardsMsg = []
+    let columnsHeightList = [0, 0, 0, 0] //记录每一列的高度
+    let allCards = document.getElementsByClassName('card')
+    Array.from(allCards).forEach((card, index) => {
+      let preIndex = index - 4
+      let columnIndex = index % 4
+      let rowIndex = Math.floor(index / 4)
+      let cardHeight = card.clientHeight
+      //设置每个card的文本
+      card.innerText = `card${index + 1}`
+
+      //设置每个card的位置
+      if (preIndex >= 0) {
+        card.style.top = columnsHeightList[columnIndex] + rowIndex * 10 + 'px'
+      } else {
+        card.style.top = columnsHeightList[columnIndex] + 'px'
+      }
+      card.style.left = columnIndex * 210 + 'px'
+      columnsHeightList[columnIndex] += cardHeight
+    })
+  </script>
+</html>
