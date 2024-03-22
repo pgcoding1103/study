@@ -35,10 +35,10 @@
     <div class="container">
       <div class="card" style="height: 400px"></div>
       <div class="card"></div>
+      <div class="card" style="height: 400px"></div>
       <div class="card"></div>
       <div class="card"></div>
-      <div class="card"></div>
-      <div class="card"></div>
+      <div class="card" style="height: 300px"></div>
       <div class="card"></div>
       <div class="card"></div>
       <div class="card"></div>
@@ -55,7 +55,8 @@
     // 注意：一行一个时上下间距的情况
     // 思路：
     // 1.计算出容器内card的个数、card的宽度、card的间距
-    // 2.通过绝对定位设置每个卡片位置并更新每一列的高度
+    // 2.根据是否第一行，先把第一行排列好
+    // 2.找出最低列，通过绝对定位设置每个卡片位置并更新最低列的高度
     function reload() {
       const container = document.querySelector('.container')
       let windowWidth = window.innerWidth //视口宽度
@@ -65,6 +66,7 @@
       let allCards = document.getElementsByClassName('card')
       let columnCount = Math.floor(containerWidth / 250)
       let columnsHeightList = new Array(columnCount).fill(0) //记录每一列的高度
+      let gapCountList = new Array(columnCount).fill(0)
       let gapCount = columnCount - 1
       let cardWidth =
         (containerWidth *
@@ -73,26 +75,33 @@
 
       let cardGap = (containerWidth - cardWidth * columnCount) / gapCount
       Array.from(allCards).forEach((card, index) => {
+        // debugger
         //设置每个card的文本和宽度
         card.innerText = `card${index + 1}`
         card.style.width = cardWidth + 'px'
         let columnIndex = index % columnCount
-        let rowIndex = Math.floor(index / columnCount)
+        // let rowIndex = Math.floor(index / columnCount) //这一列第几行下标
         let cardHeight = card.clientHeight
-        //设置每个card的高度
+        let minHeightIndex = columnsHeightList.findIndex(
+          item => item === Math.min(...columnsHeightList)
+        )
+        //设置每个card的位置
         if (index > columnCount - 1) {
           cardGap = cardGap ? cardGap : 10
           card.style.top =
-            columnsHeightList[columnIndex] + rowIndex * cardGap + 'px'
+            columnsHeightList[minHeightIndex] +
+            gapCountList[minHeightIndex] * cardGap +
+            'px'
+          card.style.left = minHeightIndex * (cardWidth + cardGap) + 'px'
         } else {
-          card.style.top = 0 + 'px'
+          card.style.top = 0
+          card.style.left = index * (cardWidth + cardGap) + 'px'
         }
-        //设置每个card的left
-        columnCount > 1
-          ? (card.style.left = columnIndex * (cardWidth + cardGap) + 'px')
-          : (card.style.left = 0)
-        //更新每一列的高度
-        columnsHeightList[columnIndex] += cardHeight
+
+        //更新最低列的高度
+        columnsHeightList[minHeightIndex] += cardHeight
+        //更新每一列card数量
+        gapCountList[minHeightIndex] += 1
       })
     }
 
