@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .container {
+        position: relative;
+        width: 80%;
+        height: 100vh;
+      }
+      .card {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 200px;
+        text-align: center;
+        line-height: 200px;
+        background-color: aquamarine;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="card" style="height: 400px"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+      <div class="card"></div>
+    </div>
+  </body>
+  <script>
+    // 注意：一行一个时上下间距的情况
+    // 思路：
+    // 1.计算出容器内card的个数、card的宽度、card的间距
+    // 2.通过绝对定位设置每个卡片位置并更新每一列的高度
+    function reload() {
+      const container = document.querySelector('.container')
+      let windowWidth = window.innerWidth //视口宽度
+      let windowHeight = window.innerHeight //视口高度
+      let containerWidth = container.clientWidth //容器宽度
+      let allCardsMsg = []
+      let allCards = document.getElementsByClassName('card')
+      let columnCount = Math.floor(containerWidth / 250)
+      let columnsHeightList = new Array(columnCount).fill(0) //记录每一列的高度
+      let gapCount = columnCount - 1
+      let cardWidth =
+        (containerWidth *
+          ((columnCount * 10) / (columnCount * 10 + gapCount))) /
+        columnCount
+
+      let cardGap = (containerWidth - cardWidth * columnCount) / gapCount
+      Array.from(allCards).forEach((card, index) => {
+        //设置每个card的文本和宽度
+        card.innerText = `card${index + 1}`
+        card.style.width = cardWidth + 'px'
+        let columnIndex = index % columnCount
+        let rowIndex = Math.floor(index / columnCount)
+        let cardHeight = card.clientHeight
+        //设置每个card的高度
+        if (index > columnCount - 1) {
+          cardGap = cardGap ? cardGap : 10
+          card.style.top =
+            columnsHeightList[columnIndex] + rowIndex * cardGap + 'px'
+        } else {
+          card.style.top = 0 + 'px'
+        }
+        //设置每个card的left
+        columnCount > 1
+          ? (card.style.left = columnIndex * (cardWidth + cardGap) + 'px')
+          : (card.style.left = 0)
+        //更新每一列的高度
+        columnsHeightList[columnIndex] += cardHeight
+      })
+    }
+
+    window.onresize = reload
+    reload()
+  </script>
+</html>
