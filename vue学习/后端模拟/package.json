@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "blueimp-md5": "^2.19.0",
     "express": "^4.19.2"
   }
 }

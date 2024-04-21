@@ -25,7 +25,8 @@
 
     addRoutes(routes)
     localStorage.setItem('token', token)
-    router.push('/home')
+    //刷新当前页
+    router.go(0)
   }
 </script>
 <template>
